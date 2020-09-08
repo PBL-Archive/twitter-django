@@ -3,6 +3,7 @@
 
 <head>
     {% load static %}
+    {% load filters %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Twitter & Tweepy API Demo</title>
@@ -25,7 +26,7 @@
 <body>
 
     <div class="container text-center mt-3">
-        <span class="h1 font-weight-light">Twitter & Tweepy API Demo</p>
+        <span class="h1 font-weight-light">Twitter API Demo</p>
     </div>
 
     <form action="/" method="POST" class="container py-2">
@@ -41,13 +42,29 @@
         <div class="row">
             {% if length is not 0 %}
             {% for tweet in tweets %}
+            {% if not forloop.first %}
             <div class="col-md-3 my-2">
-                <div class="card w-100 h-100 p-2 shadow">
-                    <span>Tweet No. {{forloop.counter}}</span>
-                    <hr class="my-2">
-                    <span>{{tweet.full_text}}</span>
+                <div class="card d-flex flex-row h-100" style="padding:10px;border-radius:5px;">
+                    <div class="d-flex flex-column w-100">
+                        <div class="border-bottom d-flex pb-2">
+                            <img src="{{tweet.user.profile_image_url_https}}" alt="P" class="rounded-circle"
+                                style="max-width:48px;max-height:48px;" />
+                            <div class="d-flex flex-column pl-2">
+                                <div class="">{{tweet.user.name|slice:17}}</div>
+                                <a href="https://www.twitter.com/{{tweet.user.screen_name}}" target="_blank"
+                                    class="text-muted">@{{tweet.user.screen_name|slice:23}}</a>
+                            </div>
+                        </div>
+                        <div class="text-wrap py-1 h-100">{{tweet.full_text|removeTags}}</div>
+                        <div class="d-flex border-top pt-1 justify-content-between">
+                            <div class="small text-muted">{{tweet.created_at}}</div>
+                            <a href="https://www.twitter.com/{{tweet.user.screen_name}}/status/{{tweet.id_str}}"
+                                target="_blank" class="text-muted small">read on twitter</a>
+                        </div>
+                    </div>
                 </div>
             </div>
+            {% endif %}
             {% endfor %}
             {% else %}
             <div class="container d-flex">

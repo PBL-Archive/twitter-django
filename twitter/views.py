@@ -1,18 +1,14 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 import tweepy
+import keys
 from tweepy import OAuthHandler
-
-consumer_key = "XXX"
-consumer_secret = "XXX"
-access_token = "XXX"
-access_token_secret = "XXX"
 
 
 def home(request):
-
+    tweets = [None]
     content = {
-        'tweets': None,
+        'tweets': tweets,
         'length': 0
     }
 
@@ -20,12 +16,17 @@ def home(request):
         search_query = request.POST.get('find')
         if search_query is not "":
             print(search_query)
-            auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-            auth.set_access_token(access_token, access_token_secret)
+            auth = tweepy.OAuthHandler(keys.consumer_key, keys.consumer_secret)
+            auth.set_access_token(keys.access_token, keys.access_token_secret)
             api = tweepy.API(auth)
             search_query = search_query + " -filter:retweets"
-            tweets = api.search(search_query, count=100,
-                                tweet_mode='extended', result_type='mixed')
+            i = 1
+            for tweet in tweepy.Cursor(api.search, count=150, q=search_query, tweet_mode='extended',                                        lang="en",
+                                       since="2006-06-15", result_type="recent").items():
+                tweets.append(tweet)
+                i = i+1
+                if i == 5:
+                    break
             length = len(tweets)
             content.update({'tweets': tweets, 'length': length})
 

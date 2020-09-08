@@ -1,12 +1,13 @@
-/keys.txt
-
 # Django #
 *.log
 *.pot
 *.pyc
 __pycache__
-db.sqlite3
 media
+
+# Others #
+/keys.py
+/test.json
 
 # Backup files # 
 *.bak 
