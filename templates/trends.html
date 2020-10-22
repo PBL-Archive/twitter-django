@@ -67,27 +67,12 @@
 <body>
 
     <div class="container text-center py-2">
-        <div class="d-flex">
-            <a class="w-100" href="/search">Tweets Search</a>
-            <a class="w-100" href="/trends">Trends Search</a>
-        </div>
+        <a class="w-100" href="/">Go to home</a>
     </div>
-
+    
     <div class="container text-center mt-3">
-        <span class="h1 font-weight-light">Twitter API Demo</p>
+        <span class="h1 font-weight-light">Trends Search</p>
     </div>
-
-    <form action="/search" method="POST" class="container py-2">
-        {% csrf_token %}
-        <div class="d-flex justify-content-center border py-2 px-4 rounded-pill">
-            <input type="text" id="find" name="find" class="flex-fill border-0" placeholder="Search Twitter">
-            <span class="border-left px-1"></span>
-            <input type="number" id="count" name="count" class="border-0" placeholder="100" min="1" , max="2500">
-            <span class="border-right px-1 mr-2"></span>
-            <button type="submit" class="border-0 p-0" style="background-color:transparent;color:lightblue;"><img
-                    src="{% static 'img/search.png' %}" style="max-width:24px;"></button>
-        </div>
-    </form>
 
     <form autocomplete="off" action="/trends" method="POST" class="container py-2">
         {% csrf_token %}
@@ -100,6 +85,25 @@
             </div>
         </div>
     </form>
+
+    <div class="container mb-4 pb-4 mt-3">
+        <div class="row">
+            {% if length is not 0 %}
+            <p class="col-md-12">Trends for {{location}}. Click on trend to see tweets on Twitter</p>
+            {% for trend, url in result %}
+            {% if not forloop.first %}
+            <div class="col-md-12">
+                <a class="text-primary" target="_blank" href="https://twitter.com/search?q={{url}}">{{trend}}</a>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            <div class="container d-flex">
+                <span class="mx-auto text-danger">Please search for something to begin!</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
 
     <script>
         if (window.history.replaceState) {

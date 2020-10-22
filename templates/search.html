@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    {% load filters %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter & Tweepy API Demo</title>
+    <link rel="shortcut icon" href="{% static 'img/twitter.png' %}" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <style>
+        #find,
+        #count {
+            outline: none !important;
+        }
+
+        #count {
+            max-width: 60px !important;
+        }
+
+        button:focus {
+            outline: none !important;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container text-center py-2">
+        <a class="w-100" href="/">Go to home</a>
+    </div>
+
+    <div class="container text-center mt-3">
+        <span class="h1 font-weight-light">Tweets Search</p>
+    </div>
+
+    <form action="/search" method="POST" class="container py-2">
+        {% csrf_token %}
+        <div class="d-flex justify-content-center border py-2 px-4 rounded-pill">
+            <input type="text" id="find" name="find" class="flex-fill border-0" placeholder="Search Twitter">
+            <span class="border-left px-1"></span>
+            <input type="number" id="count" name="count" class="border-0" placeholder="100" min="1" , max="2500">
+            <span class="border-right px-1 mr-2"></span>
+            <button type="submit" class="border-0 p-0" style="background-color:transparent;color:lightblue;"><img
+                    src="{% static 'img/search.png' %}" style="max-width:24px;"></button>
+        </div>
+    </form>
+
+    <div class="container mb-4 pb-4 mt-3">
+        <div class="row">
+            {% if length is not 0 %}
+            {% for tweet in tweets %}
+            {% if not forloop.first %}
+            <div class="col-md-3 my-2">
+                <div class="card d-flex flex-row h-100" style="padding:10px;border-radius:5px;">
+                    <div class="d-flex flex-column w-100">
+                        <div class="border-bottom d-flex pb-2">
+                            <img src="{{tweet.user.profile_image_url_https}}" alt="P" class="rounded-circle"
+                                style="max-width:48px;max-height:48px;" />
+                            <div class="d-flex flex-column pl-2">
+                                <div class="">{{tweet.user.name|slice:17}}</div>
+                                <a href="https://www.twitter.com/{{tweet.user.screen_name}}" target="_blank"
+                                    class="text-muted">@{{tweet.user.screen_name|slice:23}}</a>
+                            </div>
+                        </div>
+                        <div class="text-wrap py-1 h-100">{{tweet.full_text|removeTags}}</div>
+                        <div class="d-flex border-top pt-1 justify-content-between">
+                            <div class="small text-muted">{{tweet.created_at}}</div>
+                            <a href="https://www.twitter.com/{{tweet.user.screen_name}}/status/{{tweet.id_str}}"
+                                target="_blank" class="text-muted small">read on twitter</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            <div class="container d-flex">
+                <span class="mx-auto text-danger">Please search for something to begin!</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

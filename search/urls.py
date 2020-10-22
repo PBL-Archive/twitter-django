@@ -1,5 +1,5 @@
 from django.urls import path
-from twitter import views
+from search import views
 
 urlpatterns = [
     path('', views.home, name='home')
