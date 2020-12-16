@@ -1,8 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
 import tweepy
-import keys
-from tweepy import OAuthHandler
 from dotenv import load_dotenv
 import os
 load_dotenv()

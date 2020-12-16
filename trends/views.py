@@ -1,10 +1,6 @@
 from django.shortcuts import render
-from django.http import JsonResponse
 import tweepy
-import keys
-import json
 from trends import woeid_data
-from tweepy import OAuthHandler
 import urllib.parse
 from dotenv import load_dotenv
 import os
