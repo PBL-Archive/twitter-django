@@ -39,8 +39,9 @@ def home(request):
                 i = i + 1
             length = len(trends)
             result = zip(trends, url)
-        content.update({'length': length, 'location': location, 'result':result})
-
+            content.update({'length': length, 'location': location, 'result':result})
+        else:
+            content.update({'length': 0})
     return render(request, "trends.html", content)
 
 
