@@ -3,7 +3,9 @@ from django.http import JsonResponse
 import tweepy
 import keys
 from tweepy import OAuthHandler
-
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 def home(request):
     tweets = [None]
@@ -18,8 +20,8 @@ def home(request):
         if search_count == '':
             search_count = 100
         if search_query is not "":
-            auth = tweepy.OAuthHandler(keys.consumer_key, keys.consumer_secret)
-            auth.set_access_token(keys.access_token, keys.access_token_secret)
+            auth = tweepy.OAuthHandler(os.environ.get("CONSUMER_KEY"), os.environ.get("CONSUMER_SECRET"))
+            auth.set_access_token(os.environ.get("ACCESS_TOKEN"), os.environ.get("ACCESS_TOKEN_SECRET"))
             api = tweepy.API(auth, wait_on_rate_limit=True)
             search_query = search_query + " -filter:retweets"
             i = 1

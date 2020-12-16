@@ -6,7 +6,9 @@ import json
 from trends import woeid_data
 from tweepy import OAuthHandler
 import urllib.parse
-
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 def home(request):
     trends = [None]
@@ -22,8 +24,8 @@ def home(request):
     location = request.POST.get('location')
     if 'location' in request.POST:
         print(location)
-        auth = tweepy.OAuthHandler(keys.consumer_key, keys.consumer_secret)
-        auth.set_access_token(keys.access_token, keys.access_token_secret)
+        auth = tweepy.OAuthHandler(os.environ.get("CONSUMER_KEY"), os.environ.get("CONSUMER_SECRET"))
+        auth.set_access_token(os.environ.get("ACCESS_TOKEN"), os.environ.get("ACCESS_TOKEN_SECRET"))
         api = tweepy.API(auth,wait_on_rate_limit=True)
         woeid_id = woeid(woeid_json, location)
         if woeid_id is not None:
