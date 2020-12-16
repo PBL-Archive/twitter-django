@@ -16,7 +16,7 @@ def home(request):
 
     if 'find' in request.POST:
         search_query = request.POST.get('find')
-        search_count = int(request.POST.get('count'))
+        search_count = request.POST.get('count')
         if search_count == '':
             search_count = 100
         if search_query is not "":
@@ -27,7 +27,7 @@ def home(request):
             i = 1
             for tweet in tweepy.Cursor(
                 api.search,
-                count=search_count,
+                count=int(search_count),
                 q=search_query,
                 tweet_mode='extended',
                 lang='en',
@@ -35,7 +35,7 @@ def home(request):
             ).items():
                 tweets.append(tweet)
                 i = i+1
-                if i > search_count:
+                if i > int(search_count):
                     break
             length = len(tweets)
             content.update({'tweets': tweets, 'length': length})
